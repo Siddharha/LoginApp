@@ -8,15 +8,22 @@ export default class Login extends React.Component {
                   dataSource:"",
                   user:"",
                   password:"",
-                  isProgress:false}
+                  isProgress:false,}
+                  this.handleChange = this.handleChange.bind(this);
   }
 
 onPress(){
 
-  if(this.state.user !="" || this.state.password !=""){
-    this.setState({isProgress:true});
+  if((this.state.user !="") && (this.state.password !="")){
+    this.handleChange()
+    console.log(this.state.isProgress)
+  
     this.callLogin();
   }
+}
+
+handleChange(){
+  this.setState({ isProgress: true});
 }
 
 callLogin(){
@@ -41,7 +48,7 @@ callLogin(){
     .catch((error) => console.warn("fetch error:", error))
     .then((response) => {
       console.log(JSON.stringify(response));
-      this.state.isProgress = false;
+     // this.state.isProgress = false;
       if(response.success==1){
         this.props.navigation.navigate('MainPage');
       }else{
@@ -55,7 +62,7 @@ callLogin(){
       <View style={styles.container}>
         <Text style={styles.textStyle}>Log In</Text>
         
-       <ActivityIndicator animating={()=>this.state.isProgress} size="large" color="#0000ff" />
+       <ActivityIndicator animating={this.state.isProgress} size="large" color="#0000ff" />
         <TextInput
         placeholder="Enter User ID"
         style={styles.inputStyle}
