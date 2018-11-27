@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, TextInput, View, TouchableOpacity, Alert, AppRegistry, ActivityIndicator } from 'react-native';
+import { StyleSheet, Text, TextInput, View, TouchableOpacity, Alert, KeyboardAvoidingView, ActivityIndicator } from 'react-native';
 
 export default class Login extends React.Component {
   constructor(props){
@@ -8,23 +8,18 @@ export default class Login extends React.Component {
                   dataSource:"",
                   user:"",
                   password:"",
-                  isProgress:false,}
-                  this.handleChange = this.handleChange.bind(this);
+                  isProgress:false}
   }
 
 onPress(){
 
   if((this.state.user !="") && (this.state.password !="")){
-    this.handleChange()
-    console.log(this.state.isProgress)
-  
+    this.setState({ isProgress: true});
     this.callLogin();
   }
 }
 
-handleChange(){
-  this.setState({ isProgress: true});
-}
+
 
 callLogin(){
 
@@ -57,28 +52,46 @@ callLogin(){
 })
 }
 
+closeActivityIndicator = () => setTimeout(() => this.setState({
+  animating: false }), 60000)
+  
+  componentDidMount = () => this.closeActivityIndicator()
+  
   render() {
     return (
+      
       <View style={styles.container}>
+      
         <Text style={styles.textStyle}>Log In</Text>
         
-       <ActivityIndicator animating={this.state.isProgress} size="large" color="#0000ff" />
-        <TextInput
+       <ActivityIndicator 
+       animating={this.state.isProgress} 
+       size="large" 
+       color="#0000ff" />
+    <KeyboardAvoidingView
+      style={styles.container_view_avoid}
+      behavior="padding"
+    >
+       <TextInput
         placeholder="Enter User ID"
         style={styles.inputStyle}
         onChangeText={(text) => this.setState({user:text})}/>
         <TextInput
         onChangeText={(text) => this.setState({password:text})}
+        secureTextEntry={true}
         placeholder="Enter Password"
         style={styles.inputStyle}/>
-
+</KeyboardAvoidingView>
          <TouchableOpacity
          style={styles.button}
          onPress={() => this.onPress()}
        >
          <Text style={styles.btn_txt}> LOG IN </Text>
        </TouchableOpacity>
+       
+        
       </View>
+     
     );
   }
 }
@@ -88,16 +101,23 @@ callLogin(){
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
   },
+  container_view_avoid: {
+    flex: 1,
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
    textStyle: {
+     flex:0,
     color:'#00bcd4',
     fontWeight:"bold",
     fontSize: 30,
-    marginBottom: 60,
+    marginBottom: 10,
+    marginTop: 50,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -112,6 +132,7 @@ const styles = StyleSheet.create({
     height: 40, 
     margin: 5,
     padding:10,
+    fontSize:20,
     borderColor: 'gray', 
     borderWidth: 1,
     width:'90%',
