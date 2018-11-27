@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, TextInput, View, TouchableOpacity, Alert } from 'react-native';
+import { StyleSheet, Text, TextInput, View, TouchableOpacity, Alert, AppRegistry, ActivityIndicator } from 'react-native';
 
 export default class Login extends React.Component {
   constructor(props){
@@ -7,11 +7,16 @@ export default class Login extends React.Component {
     this.state ={ isLoading: true,
                   dataSource:"",
                   user:"",
-                  password:""}
+                  password:"",
+                  isProgress:false}
   }
 
 onPress(){
-  this.callLogin();
+
+  if(this.state.user !="" || this.state.password !=""){
+    this.setState({isProgress:true});
+    this.callLogin();
+  }
 }
 
 callLogin(){
@@ -36,6 +41,7 @@ callLogin(){
     .catch((error) => console.warn("fetch error:", error))
     .then((response) => {
       console.log(JSON.stringify(response));
+      this.state.isProgress = false;
       if(response.success==1){
         this.props.navigation.navigate('MainPage');
       }else{
@@ -49,6 +55,7 @@ callLogin(){
       <View style={styles.container}>
         <Text style={styles.textStyle}>Log In</Text>
         
+       <ActivityIndicator animating={()=>this.state.isProgress} size="large" color="#0000ff" />
         <TextInput
         placeholder="Enter User ID"
         style={styles.inputStyle}
@@ -112,6 +119,9 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontWeight:"bold",
     fontSize: 18,
+  },
+  loader:{
+    
   }
 
 });

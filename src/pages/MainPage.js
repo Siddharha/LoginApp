@@ -4,6 +4,7 @@ import { Card, ListItem  } from 'react-native-elements'
 export default class MainPage extends React.Component {
   constructor(props){
     super(props);
+    this.navigate = this.props.navigation.navigate; 
     this.state ={dataList:[{
       name: 'Amy Farha',
       avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
@@ -27,6 +28,14 @@ export default class MainPage extends React.Component {
     ]}
   }
 
+  onListItemClick(l){
+ // this.props.navigation.navigate('ListDetails');
+  this.navigate("ListDetails", {
+    name: l.name,
+    subtitle:l.subtitle,
+    avatar:l.avatar_url
+  });
+  }
   render() {
     return (
       <View style={styles.container}>
@@ -35,7 +44,7 @@ export default class MainPage extends React.Component {
 
     <Card  key={i} >
 <ListItem
-      
+      onPress={()=> this.onListItemClick(l)}
       leftAvatar={{ source: { uri: l.avatar_url } }}
       title={l.name}
       subtitle={l.subtitle}

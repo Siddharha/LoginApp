@@ -5,6 +5,7 @@ import {
 } from 'react-navigation';
 import Login from "./src/pages/Login";
 import MainPage from "./src/pages/MainPage";
+import ListDetails from "./src/pages/ListDetails";
 
 const MainNavigator = createStackNavigator(
   {
@@ -14,6 +15,9 @@ const MainNavigator = createStackNavigator(
       navigationOptions: {
         headerTitle: 'Main Page'
       }
+    },
+    ListDetails: {screen: ListDetails,
+     
     }
   }
 );
