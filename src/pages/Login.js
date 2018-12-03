@@ -1,25 +1,29 @@
 import React from 'react';
 import { StyleSheet, Text, TextInput, View, TouchableOpacity, Alert, KeyboardAvoidingView, ActivityIndicator } from 'react-native';
-
+import MainPage from './MainPage'
 export default class Login extends React.Component {
   constructor(props){
     super(props);
-    this.state ={ isLoading: true,
+    this.state ={
                   dataSource:"",
                   user:"",
                   password:"",
-                  isProgress:false}
+                  data: [],
+                  isLoading: true,}
   }
 
 onPress(){
 
   if((this.state.user !="") && (this.state.password !="")){
-    this.setState({ isProgress: true});
+   // this.setState({isLoading: false});
     this.callLogin();
   }
 }
 
-
+componentDidMount() {
+  fetchFunction()
+    .then(data => this.setState({ data, isLoading: false }))
+}
 
 callLogin(){
 
@@ -51,13 +55,8 @@ callLogin(){
       }
 })
 }
-
-closeActivityIndicator = () => setTimeout(() => this.setState({
-  animating: false }), 60000)
-  
-  componentDidMount = () => this.closeActivityIndicator()
-  
-  render() {
+render() {
+  const {data, isLoading} = this.state;
     return (
       
       <View style={styles.container}>
@@ -82,6 +81,17 @@ closeActivityIndicator = () => setTimeout(() => this.setState({
         placeholder="Enter Password"
         style={styles.inputStyle}/>
 </KeyboardAvoidingView>
+
+<View>
+        <MainPage data={data} />
+        {isLoading && (
+          <ActivityIndicator
+            style={{ height: 80 }}
+            color="#C00"
+            size="large"
+          />
+        )}
+      </View>
          <TouchableOpacity
          style={styles.button}
          onPress={() => this.onPress()}
